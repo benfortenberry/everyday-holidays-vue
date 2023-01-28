@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Everyday Holidays",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

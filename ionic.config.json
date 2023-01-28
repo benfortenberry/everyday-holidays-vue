@@ -1,0 +1,7 @@
+{
+  "name": "Everyday Holidays",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
