@@ -1,39 +1,33 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>All Holidays</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-    <ion-list>
+	<ion-page>
+		<ion-header>
+			<ion-toolbar>
+				<ion-title>All Holidays</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		<ion-content :fullscreen="true">
+			<ion-list>
 
-       <ion-item-group v-for="h in HolidayData.holidays" v-bind:key="h.keyword">
-    <ion-item-divider v-if='!h.date'>
-      <ion-label color='primary'><h1>{{h.name}}</h1></ion-label>
-    </ion-item-divider>
+				<ion-item-group v-for="h in HolidayData.holidays" v-bind:key="h.keyword">
+					<ion-item-divider v-if='!h.date'>
+						<ion-label color='primary'>
+							<h1>{{ h.name }}</h1>
+						</ion-label>
+					</ion-item-divider>
 
-    <ion-item v-if='h.date'>
-      <ion-label class="ion-text-wrap">	<h1>{{ h.name }}</h1>
-						<p>{{ h.date }}</p></ion-label>
-    </ion-item>
-   
-  </ion-item-group>
-    
-				<!-- <ion-item >
-					<ion-label v-if='h.date'>
-						<h1>{{ h.name }}</h1>
-						<p>{{ h.date }}</p>
-					</ion-label>
-          <ion-label  v-else>
-						{{ h.name }}
-					</ion-label>
-				</ion-item>
-        -->
-      
+					<ion-item v-if='h.date'>
+						<ion-label class="ion-text-wrap">
+							<h1>{{ h.name }}</h1>
+							<p>{{ h.date }}</p>
+						</ion-label>
+					</ion-item>
+
+				</ion-item-group>
+
+
 			</ion-list>
-    </ion-content>
-  </ion-page>
+		</ion-content>
+	</ion-page>
 </template>
 
 
@@ -46,9 +40,8 @@ import {
 	IonContent,
 	IonLabel,
 	IonItem,
-	IonInput,
-  IonItemDivider,
-  IonItemGroup,
+	IonItemDivider,
+	IonItemGroup,
 	IonList,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
@@ -59,17 +52,17 @@ export default defineComponent({
 		return {
 			term: "",
 			HolidayData,
-		
+
 			plusMinus: 0,
 		};
 	},
 
 	methods: {
-	
+
 	},
 	components: {
 		IonPage,
-IonItemDivider,
+		IonItemDivider,
 		IonContent,
 		IonList,
 		IonTitle,
@@ -77,7 +70,7 @@ IonItemDivider,
 		IonToolbar,
 		IonLabel,
 		IonItem,
-    IonItemGroup
+		IonItemGroup
 	},
 });
 </script>
