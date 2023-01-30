@@ -64,7 +64,7 @@ import moment from "moment";
 import HolidayData from "../../public/assets/json/holidays.json";
 import { arrowForwardSharp, arrowBackSharp } from "ionicons/icons";
 export default defineComponent({
-	name: "HomeView",
+	name: "HomePage",
 	data() {
 		return {
 			date: "",
