@@ -1,5 +1,5 @@
 {
-	"appId": "everyday.holidays",
+	"appId": "everyday.holidays.vue.two",
 	"appName": "Everyday Holidays",
 	"webDir": "dist",
 	"bundledWebRuntime": false,

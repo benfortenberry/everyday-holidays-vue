@@ -31,6 +31,6 @@ import {
   IonIcon,
   IonPage,
   IonRouterOutlet,
-} from "@ionic/vue";
-import { calendar, search, list } from "ionicons/icons";
+} from '@ionic/vue';
+import { calendar, search, list } from 'ionicons/icons';
 </script>
