@@ -32,8 +32,13 @@
                 <ion-card-content class="white">
                   {{ h.blurb }}
                 </ion-card-content>
-                <ion-button @click="doShare(h.name)" fill="clear"
-                  ><ion-icon :icon="shareSocial"></ion-icon
+                <ion-button @click="doShare(h.name, h.date)" fill="clear"
+                  ><ion-icon color="dark" :icon="shareSocial"></ion-icon
+                ></ion-button>
+                <ion-button
+                  @click="scheduleNotification(h.name, h.date)"
+                  fill="clear"
+                  ><ion-icon :icon="notifications"></ion-icon
                 ></ion-button>
                 <!-- <ion-button fill="clear">Add to Calendar</ion-button> -->
               </ion-card>
@@ -42,6 +47,13 @@
         </ion-grid>
       </ion-content>
     </ion-content>
+
+    <ion-alert
+      :is-open="isOpen"
+      header="Success"
+      message="A reminder will be sent every year."
+      :buttons="alertButtons"
+    ></ion-alert>
   </ion-page>
 </template>
 
@@ -61,13 +73,21 @@ import {
   IonButtons,
   IonCardTitle,
   IonIcon,
+  IonAlert,
 } from '@ionic/vue';
 import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import moment from 'moment';
 import HolidayData from '../../public/assets/json/holidays.json';
-import { arrowForwardSharp, arrowBackSharp, shareSocial } from 'ionicons/icons';
+import {
+  arrowForwardSharp,
+  arrowBackSharp,
+  shareSocial,
+  notifications,
+} from 'ionicons/icons';
 import { Share } from '@capacitor/share';
+import { LocalNotifications } from '@capacitor/local-notifications';
+
 export default defineComponent({
   name: 'HomePage',
   data() {
@@ -77,13 +97,21 @@ export default defineComponent({
       homeData: [{}],
       arrowForwardSharp,
       shareSocial,
+      notifications,
       arrowBackSharp,
       plusMinus: 0,
+      alertButtons: ['OK'],
+      isOpen: false,
     };
   },
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     this.date = moment().format('MMMM D');
     this.getHomeData();
+
+    const permission = await LocalNotifications.checkPermissions();
+    console.log(permission);
+
+    await LocalNotifications.requestPermissions();
   },
 
   methods: {
@@ -94,6 +122,34 @@ export default defineComponent({
           this.homeData.push(element);
         }
       });
+    },
+    scheduleNotification(name: any, date: any) {
+      try {
+        const dateParts = date.split(' ');
+
+        const monthNum = new Date(`${dateParts[0]} 1, 2022`).getMonth() + 1;
+
+        const id = new Date().getTime() / 1000;
+
+        this.isOpen = true;
+
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              title: 'Everyday Holiday Reminder',
+              body: 'Today is ' + name,
+              id,
+              schedule: {
+                repeats: true,
+                every: 'year',
+                on: { month: monthNum, day: dateParts[1] },
+              },
+            },
+          ],
+        });
+      } catch {
+        console.log('notification error');
+      }
     },
     async doShare(holidayName: any) {
       try {
@@ -134,6 +190,7 @@ export default defineComponent({
     IonIcon,
     IonCardContent,
     IonCardTitle,
+    IonAlert,
   },
 });
 </script>

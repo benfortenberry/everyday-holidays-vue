@@ -33,20 +33,32 @@
             <ion-label>{{ h.name }} - {{ h.date }}</ion-label>
           </ion-item>
           <div class="border-top" slot="content">
-            <ion-card class="ion-no-margin ">
+            <ion-card class="ion-no-margin">
               <img :src="`assets/imgs/${h.keyword}.jpg`" />
 
-              <ion-card-content class="white ">
+              <ion-card-content class="white">
                 {{ h.blurb }}
               </ion-card-content>
               <ion-button @click="doShare(h.name, h.date)" fill="clear"
                 ><ion-icon color="dark" :icon="shareSocial"></ion-icon
+              ></ion-button>
+              <ion-button
+                @click="scheduleNotification(h.name, h.date)"
+                fill="clear"
+                ><ion-icon color="dark" :icon="notifications"></ion-icon
               ></ion-button>
             </ion-card>
           </div>
         </ion-accordion>
       </ion-accordion-group>
     </ion-content>
+
+    <ion-alert
+      :is-open="isOpen"
+      header="Success"
+      message="A reminder will be sent every year."
+      :buttons="alertButtons"
+    ></ion-alert>
   </ion-page>
 </template>
 
@@ -67,11 +79,16 @@ import {
   IonAccordionGroup,
   IonGrid,
   IonCard,
+  IonAlert,
+  IonIcon,
+  IonButton,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { shareSocial } from 'ionicons/icons';
+import { shareSocial, notifications } from 'ionicons/icons';
 import HolidayData from '../../public/assets/json/holidays.json';
 import { Share } from '@capacitor/share';
+import { LocalNotifications } from '@capacitor/local-notifications';
+
 export default defineComponent({
   name: 'SearchPage',
   data() {
@@ -80,6 +97,9 @@ export default defineComponent({
       HolidayData,
       searchData: [{}],
       shareSocial,
+      notifications,
+      isOpen: false,
+      alertButtons: ['OK'],
       plusMinus: 0,
     };
   },
@@ -95,6 +115,34 @@ export default defineComponent({
         console.log(holidayName);
       } catch {
         console.log('error');
+      }
+    },
+    scheduleNotification(name: any, date: any) {
+      try {
+        const dateParts = date.split(' ');
+
+        const monthNum = new Date(`${dateParts[0]} 1, 2022`).getMonth() + 1;
+
+        const id = new Date().getTime() / 1000;
+
+        this.isOpen = true;
+
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              title: 'Everyday Holiday Reminder',
+              body: 'Today is ' + name,
+              id,
+              schedule: {
+                repeats: true,
+                every: 'year',
+                on: { month: monthNum, day: dateParts[1] },
+              },
+            },
+          ],
+        });
+      } catch {
+        console.log('notification error');
       }
     },
     doSearch() {
@@ -120,9 +168,12 @@ export default defineComponent({
     IonLabel,
     IonItem,
     IonAccordion,
+    IonButton,
     IonAccordionGroup,
     IonInput,
     IonCard,
+    IonAlert,
+    IonIcon,
   },
 });
 </script>

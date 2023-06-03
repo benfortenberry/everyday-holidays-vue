@@ -1,15 +1,15 @@
 {
-	"appId": "everyday.holidays.vue.two",
-	"appName": "Everyday Holidays",
-	"webDir": "dist",
-	"bundledWebRuntime": false,
-	"plugins": {
-        "SplashScreen": {
-            "launchShowDuration": 3000,
-            "launchAutoHide": true,
-            "androidScaleType": "CENTER_CROP",
-            "splashImmersive": true,
-            "backgroundColor": "#354f52"
-        }
+  "appId": "everyday.holidays.vue.two",
+  "appName": "Everyday Holidays",
+  "webDir": "dist",
+  "plugins": {
+    "LocalNotifications": {},
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "androidScaleType": "CENTER_CROP",
+      "splashImmersive": true,
+      "backgroundColor": "#354f52"
     }
+  }
 }
