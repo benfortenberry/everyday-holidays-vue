@@ -43,6 +43,7 @@
       header="Success"
       message="A reminder will be sent every year."
       :buttons="alertButtons"
+      @didDismiss="isOpen = false"
     ></ion-alert>
   </ion-page>
 </template>
