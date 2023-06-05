@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page @touchstart="touchStartMethod">
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -70,11 +70,38 @@ export default defineComponent({
 
     const permission = await LocalNotifications.checkPermissions();
     console.log(permission);
-
-    await LocalNotifications.requestPermissions();
+    if (permission.display == 'denied') {
+      await LocalNotifications.requestPermissions();
+    }
   },
 
   methods: {
+    touchStartMethod(touchEvent: any) {
+      if (touchEvent.changedTouches.length !== 1) {
+        // We only care if one finger is used
+        return;
+      }
+      const posXStart = touchEvent.changedTouches[0].clientX;
+      addEventListener(
+        'touchend',
+        (touchEvent) => this.touchEndMethod(touchEvent, posXStart),
+        { once: true }
+      );
+    },
+    touchEndMethod(touchEvent: any, posXStart: any) {
+      if (touchEvent.changedTouches.length !== 1) {
+        // We only care if one finger is used
+        return;
+      }
+      const posXEnd = touchEvent.changedTouches[0].clientX;
+      if (posXStart < posXEnd) {
+        this.addToDate();
+        // this.previous(); // swipe right
+      } else if (posXStart > posXEnd) {
+        this.subtractFromDate();
+        // this.next(); // swipe left
+      }
+    },
     getHomeData() {
       this.homeData.length = 0;
       HolidayData.holidays.forEach((element) => {

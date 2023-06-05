@@ -10,11 +10,12 @@
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-input
-                label="Find your holiday: "
-                @ionInput="doSearch"
+              <ion-searchbar
                 v-model="term"
-              ></ion-input>
+                placeholder="Find your holiday"
+                :debounce="1000"
+                @ionInput="doSearch"
+              ></ion-searchbar>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -25,7 +26,7 @@
       <ion-accordion-group v-if="term">
         <ion-accordion
           v-for="h in searchData"
-          v-bind:key="h.keyword"
+          v-bind:key="h.id"
           :value="h.keyword"
         >
           <ion-item slot="header" color="tertiary">
@@ -49,12 +50,12 @@ import {
   IonContent,
   IonLabel,
   IonItem,
-  IonInput,
   IonCol,
   IonRow,
   IonAccordion,
   IonAccordionGroup,
   IonGrid,
+  IonSearchbar,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import HolidayData from '../../public/assets/json/holidays.json';
@@ -93,8 +94,8 @@ export default defineComponent({
     IonItem,
     IonAccordion,
     IonAccordionGroup,
-    IonInput,
     HolidayCard,
+    IonSearchbar,
   },
 });
 </script>

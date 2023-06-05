@@ -6,23 +6,21 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-spinner v-if="loading" name="crescent"></ion-spinner>
-
-      <ion-list v-if="!loading" class="ion-no-padding">
+      <ion-list class="ion-no-padding">
         <ion-item-group
           class="border-bottom"
-          v-for="h in HolidayData.holidays"
-          v-bind:key="h.keyword"
+          v-for="h in renderData"
+          v-bind:key="h.id"
         >
           <ion-item-divider v-if="!h.date">
             <ion-label>
-              <h1 class="white">{{ h.name }}</h1>
+              <h2 class="white">{{ h.name }}</h2>
             </ion-label>
           </ion-item-divider>
 
           <ion-item v-if="h.date" color="secondary">
             <ion-label class="ion-text-wrap">
-              <h1>{{ h.name }}</h1>
+              <h2>{{ h.name }}</h2>
               <p>{{ h.date }}</p>
             </ion-label>
 
@@ -32,6 +30,9 @@
           </ion-item>
         </ion-item-group>
       </ion-list>
+      <ion-infinite-scroll @ionInfinite="ionInfinite">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </ion-content>
   </ion-page>
 </template>
@@ -48,7 +49,9 @@ import {
   IonItemDivider,
   IonItemGroup,
   IonList,
-  IonSpinner,
+  IonInfiniteScroll,
+  InfiniteScrollCustomEvent,
+  IonInfiniteScrollContent,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import HolidayData from '../../public/assets/json/holidays.json';
@@ -60,13 +63,85 @@ export default defineComponent({
   data() {
     return {
       HolidayData,
+      renderData: [{}],
       loading: true,
+      renderMonth: 'January',
     };
   },
   ionViewDidEnter() {
     this.loading = false;
+
+    this.renderData.length = 0;
+    HolidayData.holidays.forEach((h) => {
+      if (
+        h.name == this.renderMonth ||
+        h.date.toString().includes(this.renderMonth)
+      ) {
+        this.renderData.push(h);
+      }
+    });
   },
-  methods: {},
+  methods: {
+    ionInfinite(ev: InfiniteScrollCustomEvent) {
+      console.log(this.renderMonth);
+
+      // if (this.renderMonth == 'January') {
+      //   this.generateItems('February');
+      // }
+
+      switch (this.renderMonth) {
+        case 'January':
+          this.generateItems('February');
+          break;
+        case 'February':
+          this.generateItems('March');
+          break;
+        case 'March':
+          this.generateItems('April');
+          break;
+        case 'April':
+          this.generateItems('May');
+          break;
+        case 'May':
+          this.generateItems('June');
+          break;
+        case 'June':
+          this.generateItems('July');
+          break;
+        case 'July':
+          this.generateItems('August');
+          break;
+        case 'August':
+          this.generateItems('September');
+          break;
+        case 'September':
+          this.generateItems('October');
+          break;
+        case 'October':
+          this.generateItems('November');
+          break;
+        case 'November':
+          this.generateItems('December');
+          break;
+      }
+
+      ev.target.complete();
+
+      // setTimeout(() => ev.target.complete(), 500);
+    },
+    generateItems(month: string) {
+      this.renderMonth = month;
+
+      HolidayData.holidays.forEach((h) => {
+        if (
+          h.name == this.renderMonth ||
+          h.date.toString().includes(this.renderMonth)
+        ) {
+          this.renderData.push(h);
+        }
+      });
+    },
+  },
   components: {
     IonPage,
     IonItemDivider,
@@ -78,9 +153,10 @@ export default defineComponent({
     IonLabel,
     IonItem,
     IonItemGroup,
-    IonSpinner,
     NotifyButton,
     ShareButton,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
   },
 });
 </script>
