@@ -22,71 +22,34 @@
         <ion-grid :fixed="true">
           <ion-row>
             <ion-col size="12" size-sm="6" offset-sm="3">
-              <ion-card v-for="h in homeData" v-bind:key="h.keyword">
-                <img :src="`assets/imgs/${h.keyword}.jpg`" />
-
-                <ion-card-header text-wrap>
-                  <ion-card-title>{{ h.name }}</ion-card-title>
-                </ion-card-header>
-
-                <ion-card-content class="white">
-                  {{ h.blurb }}
-                </ion-card-content>
-                <ion-button @click="doShare(h.name, h.date)" fill="clear"
-                  ><ion-icon color="dark" :icon="shareSocial"></ion-icon
-                ></ion-button>
-                <ion-button
-                  @click="scheduleNotification(h.name, h.date)"
-                  fill="clear"
-                  ><ion-icon :icon="notifications"></ion-icon
-                ></ion-button>
-                <!-- <ion-button fill="clear">Add to Calendar</ion-button> -->
-              </ion-card>
+              <holliday-card :holidayData="homeData" />
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>
     </ion-content>
-
-    <ion-alert
-      :is-open="isOpen"
-      header="Success"
-      message="A reminder will be sent every year."
-      :buttons="alertButtons"
-      @didDismiss="isOpen = false"
-    ></ion-alert>
   </ion-page>
 </template>
 
 <script lang="ts">
 import {
   IonGrid,
-  IonCard,
   IonCol,
   IonContent,
-  IonCardHeader,
-  IonCardContent,
   IonRow,
   IonTitle,
   IonHeader,
   IonToolbar,
   IonButton,
   IonButtons,
-  IonCardTitle,
   IonIcon,
-  IonAlert,
 } from '@ionic/vue';
 import { IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import moment from 'moment';
 import HolidayData from '../../public/assets/json/holidays.json';
-import {
-  arrowForwardSharp,
-  arrowBackSharp,
-  shareSocial,
-  notifications,
-} from 'ionicons/icons';
-import { Share } from '@capacitor/share';
+import HollidayCard from '../components/HolidayCard.vue';
+import { arrowForwardSharp, arrowBackSharp } from 'ionicons/icons';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 export default defineComponent({
@@ -97,12 +60,8 @@ export default defineComponent({
       HolidayData,
       homeData: [{}],
       arrowForwardSharp,
-      shareSocial,
-      notifications,
       arrowBackSharp,
       plusMinus: 0,
-      alertButtons: ['OK'],
-      isOpen: false,
     };
   },
   async ionViewDidEnter() {
@@ -124,46 +83,7 @@ export default defineComponent({
         }
       });
     },
-    scheduleNotification(name: any, date: any) {
-      try {
-        const dateParts = date.split(' ');
 
-        const monthNum = new Date(`${dateParts[0]} 1, 2022`).getMonth() + 1;
-
-        const id = new Date().getTime() / 1000;
-
-        this.isOpen = true;
-
-        LocalNotifications.schedule({
-          notifications: [
-            {
-              title: 'Everyday Holiday Reminder',
-              body: 'Today is ' + name,
-              id,
-              schedule: {
-                repeats: true,
-                every: 'year',
-                on: { month: monthNum, day: dateParts[1] },
-              },
-            },
-          ],
-        });
-      } catch {
-        console.log('notification error');
-      }
-    },
-    async doShare(holidayName: any) {
-      try {
-        await Share.share({
-          text: this.date + ' is ' + holidayName,
-
-          dialogTitle: 'Share holiday',
-        });
-        console.log(holidayName);
-      } catch {
-        console.log('error');
-      }
-    },
     subtractFromDate() {
       this.plusMinus--;
       this.date = moment().add(this.plusMinus, 'd').format('MMMM D');
@@ -178,10 +98,8 @@ export default defineComponent({
   components: {
     IonPage,
     IonGrid,
-    IonCard,
     IonCol,
     IonContent,
-    IonCardHeader,
     IonRow,
     IonTitle,
     IonHeader,
@@ -189,9 +107,7 @@ export default defineComponent({
     IonButton,
     IonButtons,
     IonIcon,
-    IonCardContent,
-    IonCardTitle,
-    IonAlert,
+    HollidayCard,
   },
 });
 </script>

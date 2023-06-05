@@ -1,26 +1,57 @@
 <template>
-    
-     <ion-card v-for="h in homeData" v-bind:key="h.keyword">
-                <img :src="`assets/imgs/${h.keyword}.jpg`" />
+  <ion-card v-for="h in holidayData" v-bind:key="h.keyword">
+    <img :src="`assets/imgs/${h.keyword}.jpg`" />
 
-                <ion-card-header text-wrap>
-                  <ion-card-title>{{ h.name }}</ion-card-title>
-                </ion-card-header>
+    <ion-card-header text-wrap>
+      <ion-card-title>{{ h.name }}</ion-card-title>
+    </ion-card-header>
 
-                <ion-card-content class="white">
-                  {{ h.blurb }}
-                </ion-card-content>
-                <ion-button @click="doShare(h.name)" fill="clear"
-                  ><ion-icon :icon="shareSocial"></ion-icon
-                ></ion-button>
-                <!-- <ion-button fill="clear">Add to Calendar</ion-button> -->
-              </ion-card>
+    <ion-card-content class="white">
+      {{ h.blurb }}
+    </ion-card-content>
+
+    <share-button :holiday="h" />
+
+    <notify-button :holiday="h" />
+  </ion-card>
 </template>
 
-<script>
-import { defineComponent } from '@vue/composition-api'
+<script lang="ts">
+import {
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+  IonCardTitle,
+} from '@ionic/vue';
+import { defineComponent } from 'vue';
+import NotifyButton from '../components/NotifyButton.vue';
+import ShareButton from '../components/ShareButton.vue';
 
 export default defineComponent({
-    
-})
+  name: 'HolidayCard',
+  data() {
+    return {
+      date: '',
+      homeData: [{}],
+    };
+  },
+  props: {
+    holidayData: {},
+  },
+  methods: {},
+  components: {
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonCardTitle,
+    NotifyButton,
+    ShareButton,
+  },
+});
 </script>
+
+<style scoped>
+.white {
+  color: white;
+}
+</style>

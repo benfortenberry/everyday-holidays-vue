@@ -22,7 +22,6 @@
       <p v-if="term" class="ion-padding-start">
         Holidays found: {{ searchData.length }}
       </p>
-
       <ion-accordion-group v-if="term">
         <ion-accordion
           v-for="h in searchData"
@@ -33,33 +32,11 @@
             <ion-label>{{ h.name }} - {{ h.date }}</ion-label>
           </ion-item>
           <div class="border-top" slot="content">
-            <ion-card class="ion-no-margin">
-              <img :src="`assets/imgs/${h.keyword}.jpg`" />
-
-              <ion-card-content class="white">
-                {{ h.blurb }}
-              </ion-card-content>
-              <ion-button @click="doShare(h.name, h.date)" fill="clear"
-                ><ion-icon color="dark" :icon="shareSocial"></ion-icon
-              ></ion-button>
-              <ion-button
-                @click="scheduleNotification(h.name, h.date)"
-                fill="clear"
-                ><ion-icon color="dark" :icon="notifications"></ion-icon
-              ></ion-button>
-            </ion-card>
+            <holiday-card :holidayData="[h]" />
           </div>
         </ion-accordion>
       </ion-accordion-group>
     </ion-content>
-
-    <ion-alert
-      :is-open="isOpen"
-      header="Success"
-      message="A reminder will be sent every year."
-      :buttons="alertButtons"
-      @didDismiss="isOpen = false"
-    ></ion-alert>
   </ion-page>
 </template>
 
@@ -75,20 +52,13 @@ import {
   IonInput,
   IonCol,
   IonRow,
-  IonCardContent,
   IonAccordion,
   IonAccordionGroup,
   IonGrid,
-  IonCard,
-  IonAlert,
-  IonIcon,
-  IonButton,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { shareSocial, notifications } from 'ionicons/icons';
 import HolidayData from '../../public/assets/json/holidays.json';
-import { Share } from '@capacitor/share';
-import { LocalNotifications } from '@capacitor/local-notifications';
+import HolidayCard from '../components/HolidayCard.vue';
 
 export default defineComponent({
   name: 'SearchPage',
@@ -97,57 +67,11 @@ export default defineComponent({
       term: '',
       HolidayData,
       searchData: [{}],
-      shareSocial,
-      notifications,
-      isOpen: false,
-      alertButtons: ['OK'],
-      plusMinus: 0,
     };
   },
 
   methods: {
-    async doShare(holidayName: any, date: any) {
-      try {
-        await Share.share({
-          text: date + ' is ' + holidayName,
-
-          dialogTitle: 'Share holiday',
-        });
-        console.log(holidayName);
-      } catch {
-        console.log('error');
-      }
-    },
-    scheduleNotification(name: any, date: any) {
-      try {
-        const dateParts = date.split(' ');
-
-        const monthNum = new Date(`${dateParts[0]} 1, 2022`).getMonth() + 1;
-
-        const id = new Date().getTime() / 1000;
-
-        this.isOpen = true;
-
-        LocalNotifications.schedule({
-          notifications: [
-            {
-              title: 'Everyday Holiday Reminder',
-              body: 'Today is ' + name,
-              id,
-              schedule: {
-                repeats: true,
-                every: 'year',
-                on: { month: monthNum, day: dateParts[1] },
-              },
-            },
-          ],
-        });
-      } catch {
-        console.log('notification error');
-      }
-    },
     doSearch() {
-      console.log('do search');
       this.searchData.length = 0;
       this.HolidayData.holidays.forEach((it) => {
         if (it.name.toLowerCase().includes(this.term) && it.date) {
@@ -165,16 +89,12 @@ export default defineComponent({
     IonTitle,
     IonHeader,
     IonToolbar,
-    IonCardContent,
     IonLabel,
     IonItem,
     IonAccordion,
-    IonButton,
     IonAccordionGroup,
     IonInput,
-    IonCard,
-    IonAlert,
-    IonIcon,
+    HolidayCard,
   },
 });
 </script>
