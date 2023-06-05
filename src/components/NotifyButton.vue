@@ -8,7 +8,7 @@
   <ion-alert
     :is-open="isOpen"
     header="Success"
-    message="A reminder will be sent every year."
+    message="A reminder has been set!"
     :buttons="alertButtons"
     @didDismiss="isOpen = false"
   ></ion-alert>
@@ -19,6 +19,7 @@ import { IonButton, IonIcon, IonAlert } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { notifications } from 'ionicons/icons';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import moment from 'moment';
 
 export default defineComponent({
   name: 'NotifyButton',
@@ -37,9 +38,17 @@ export default defineComponent({
   methods: {
     scheduleNotification(name: any, date: any) {
       try {
-        const dateParts = date.split(' ');
+        const momentizedDate = moment(date, 'MMMM D');
 
-        const monthNum = new Date(`${dateParts[0]} 1, 2022`).getMonth() + 1;
+        momentizedDate.set({
+          hour: 7,
+          minute: 0,
+          second: 0,
+        });
+
+        if (momentizedDate.isBefore()) {
+          momentizedDate.add(1, 'y');
+        }
 
         const id = new Date().getTime() / 1000;
 
@@ -52,10 +61,10 @@ export default defineComponent({
               body: 'Today is ' + name,
               id,
               schedule: {
-                at: new Date(Date.now() + 1000 * 3),
+                at: new Date(momentizedDate.format()),
                 repeats: true,
+                every: 'year',
                 count: 99,
-                on: { month: monthNum, day: dateParts[1] },
               },
             },
           ],
