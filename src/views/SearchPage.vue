@@ -10,19 +10,20 @@
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-searchbar
+              <ion-input
+                placeholder="Find your Holiday"
                 v-model="term"
-                placeholder="Find your holiday"
+                :debounce="500"
                 @ionInput="doSearch"
-              ></ion-searchbar>
+              />
             </ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>
-      <p v-if="term" class="ion-padding-start">
+      <p v-if="term && term.length > 1" class="ion-padding-start">
         Holidays found: {{ searchData.length }}
       </p>
-      <ion-accordion-group v-if="term">
+      <ion-accordion-group v-if="term && term.length > 1">
         <ion-accordion
           v-for="h in searchData"
           v-bind:key="h.id"
@@ -54,7 +55,7 @@ import {
   IonAccordion,
   IonAccordionGroup,
   IonGrid,
-  IonSearchbar,
+  IonInput,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import HolidayData from '../../public/assets/json/holidays.json';
@@ -72,12 +73,15 @@ export default defineComponent({
 
   methods: {
     doSearch() {
-      this.searchData.length = 0;
-      this.HolidayData.holidays.forEach((it) => {
-        if (it.name.toLowerCase().includes(this.term) && it.date) {
-          this.searchData.push(it);
-        }
-      });
+      console.log(this.term.length);
+      if (this.term.length > 1) {
+        this.searchData.length = 0;
+        this.HolidayData.holidays.forEach((it) => {
+          if (it.name.toLowerCase().includes(this.term) && it.date) {
+            this.searchData.push(it);
+          }
+        });
+      }
     },
   },
   components: {
@@ -94,7 +98,7 @@ export default defineComponent({
     IonAccordion,
     IonAccordionGroup,
     HolidayCard,
-    IonSearchbar,
+    IonInput,
   },
 });
 </script>

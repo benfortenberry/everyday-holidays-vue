@@ -1,5 +1,8 @@
 <template>
-  <ion-page @touchstart="touchStartMethod">
+  <ion-page
+    v-touch:swipe.left="addToDate"
+    v-touch:swipe.right="subtractFromDate"
+  >
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -50,7 +53,6 @@ import moment from 'moment';
 import HolidayData from '../../public/assets/json/holidays.json';
 import HollidayCard from '../components/HolidayCard.vue';
 import { arrowForwardSharp, arrowBackSharp } from 'ionicons/icons';
-import { LocalNotifications } from '@capacitor/local-notifications';
 
 export default defineComponent({
   name: 'HomePage',
@@ -62,6 +64,8 @@ export default defineComponent({
       arrowForwardSharp,
       arrowBackSharp,
       plusMinus: 0,
+      startEvent: null,
+      endEvent: null,
     };
   },
   async ionViewDidEnter() {
@@ -70,32 +74,6 @@ export default defineComponent({
   },
 
   methods: {
-    touchStartMethod(touchEvent: any) {
-      if (touchEvent.changedTouches.length !== 1) {
-        // We only care if one finger is used
-        return;
-      }
-      const posXStart = touchEvent.changedTouches[0].clientX;
-      addEventListener(
-        'touchend',
-        (touchEvent) => this.touchEndMethod(touchEvent, posXStart),
-        { once: true }
-      );
-    },
-    touchEndMethod(touchEvent: any, posXStart: any) {
-      if (touchEvent.changedTouches.length !== 1) {
-        // We only care if one finger is used
-        return;
-      }
-      const posXEnd = touchEvent.changedTouches[0].clientX;
-      if (posXStart < posXEnd) {
-        this.subtractFromDate();
-        // this.previous(); // swipe right
-      } else if (posXStart > posXEnd) {
-        this.addToDate();
-        // this.next(); // swipe left
-      }
-    },
     getHomeData() {
       this.homeData.length = 0;
       HolidayData.holidays.forEach((element) => {
@@ -104,7 +82,6 @@ export default defineComponent({
         }
       });
     },
-
     subtractFromDate() {
       this.plusMinus--;
       this.date = moment().add(this.plusMinus, 'd').format('MMMM D');
