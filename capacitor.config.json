@@ -5,11 +5,14 @@
   "plugins": {
     "LocalNotifications": {},
     "SplashScreen": {
-      "launchShowDuration": 3000,
+      "launchShowDuration": 1000,
       "launchAutoHide": true,
       "androidScaleType": "CENTER_CROP",
       "splashImmersive": true,
-      "backgroundColor": "#354f52"
+      "showSpinner": true,
+      "backgroundColor": "#354f52",
+      "splashFullScreen": true,
+      "useDialog": true
     }
   }
 }

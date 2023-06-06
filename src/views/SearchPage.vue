@@ -13,7 +13,6 @@
               <ion-searchbar
                 v-model="term"
                 placeholder="Find your holiday"
-                :debounce="1000"
                 @ionInput="doSearch"
               ></ion-searchbar>
             </ion-item>

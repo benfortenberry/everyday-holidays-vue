@@ -58,8 +58,14 @@ export default defineComponent({
     );
   },
   methods: {
-    scheduleNotification(name: any, date: any, id: any) {
+    async scheduleNotification(name: any, date: any, id: any) {
       if (!this.isPending) {
+        const permission = await LocalNotifications.checkPermissions();
+        console.log(permission);
+        if (permission.display != 'granted') {
+          await LocalNotifications.requestPermissions();
+        }
+
         const momentizedDate = moment(date, 'MMMM D');
 
         momentizedDate.set({
@@ -88,7 +94,7 @@ export default defineComponent({
           ],
         });
 
-        this.isOpen = true;
+        // this.isOpen = true;
         this.isPending = true;
       } else {
         LocalNotifications.getPending().then(
@@ -103,7 +109,7 @@ export default defineComponent({
             console.log(err);
           }
         );
-        this.isOpen = true;
+        // this.isOpen = true;
         this.alertMessage = 'Reminder cancelled.';
         this.isPending = false;
       }

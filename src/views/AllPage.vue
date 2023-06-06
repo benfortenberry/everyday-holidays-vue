@@ -64,13 +64,10 @@ export default defineComponent({
     return {
       HolidayData,
       renderData: [{}],
-      loading: true,
       renderMonth: 'January',
     };
   },
   ionViewDidEnter() {
-    this.loading = false;
-
     this.renderData.length = 0;
     HolidayData.holidays.forEach((h) => {
       if (
@@ -81,14 +78,12 @@ export default defineComponent({
       }
     });
   },
+  ionViewDidLeave() {
+    this.renderData.length = 0;
+    this.renderMonth = 'January';
+  },
   methods: {
     ionInfinite(ev: InfiniteScrollCustomEvent) {
-      console.log(this.renderMonth);
-
-      // if (this.renderMonth == 'January') {
-      //   this.generateItems('February');
-      // }
-
       switch (this.renderMonth) {
         case 'January':
           this.generateItems('February');
@@ -126,8 +121,6 @@ export default defineComponent({
       }
 
       ev.target.complete();
-
-      // setTimeout(() => ev.target.complete(), 500);
     },
     generateItems(month: string) {
       this.renderMonth = month;

@@ -67,12 +67,6 @@ export default defineComponent({
   async ionViewDidEnter() {
     this.date = moment().format('MMMM D');
     this.getHomeData();
-
-    const permission = await LocalNotifications.checkPermissions();
-    console.log(permission);
-    if (permission.display == 'denied') {
-      await LocalNotifications.requestPermissions();
-    }
   },
 
   methods: {
@@ -95,10 +89,10 @@ export default defineComponent({
       }
       const posXEnd = touchEvent.changedTouches[0].clientX;
       if (posXStart < posXEnd) {
-        this.addToDate();
+        this.subtractFromDate();
         // this.previous(); // swipe right
       } else if (posXStart > posXEnd) {
-        this.subtractFromDate();
+        this.addToDate();
         // this.next(); // swipe left
       }
     },
