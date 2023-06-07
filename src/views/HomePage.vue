@@ -1,8 +1,5 @@
 <template>
-  <ion-page
-    v-touch:swipe.left="addToDate"
-    v-touch:swipe.right="subtractFromDate"
-  >
+  <ion-page>
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -20,16 +17,18 @@
         <ion-title>{{ date }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-content>
-        <ion-grid :fixed="true">
-          <ion-row>
-            <ion-col size="12" size-sm="6" offset-sm="3">
-              <holliday-card :holidayData="homeData" />
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-content>
+    <ion-content
+      :fullscreen="true"
+      v-touch:swipe.left="addToDate"
+      v-touch:swipe.right="subtractFromDate"
+    >
+      <ion-grid :fixed="true">
+        <ion-row>
+          <ion-col size="12" size-sm="6" offset-sm="3">
+            <holliday-card :holidayData="homeData" />
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
