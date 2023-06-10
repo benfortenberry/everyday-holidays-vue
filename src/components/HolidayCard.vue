@@ -11,8 +11,6 @@
     </ion-card-content>
 
     <share-button :holiday="h" />
-
-    <notify-button :holiday="h" />
   </ion-card>
 </template>
 
@@ -24,7 +22,6 @@ import {
   IonCardTitle,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import NotifyButton from '../components/NotifyButton.vue';
 import ShareButton from '../components/ShareButton.vue';
 
 export default defineComponent({
@@ -44,7 +41,6 @@ export default defineComponent({
     IonCardHeader,
     IonCardContent,
     IonCardTitle,
-    NotifyButton,
     ShareButton,
   },
 });

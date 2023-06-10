@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Search</ion-title>
+        <ion-title> Search</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -73,7 +73,6 @@ export default defineComponent({
 
   methods: {
     doSearch() {
-      console.log(this.term.length);
       if (this.term.length > 1) {
         this.searchData.length = 0;
         this.HolidayData.holidays.forEach((it) => {

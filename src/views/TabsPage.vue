@@ -17,6 +17,10 @@
           <ion-icon :icon="list" />
           <ion-label>All</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="settings" href="/app/settings">
+          <ion-icon :icon="notifications" />
+          <ion-label>Notify</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
@@ -32,5 +36,5 @@ import {
   IonPage,
   IonRouterOutlet,
 } from '@ionic/vue';
-import { calendar, search, list } from 'ionicons/icons';
+import { calendar, search, list, notifications } from 'ionicons/icons';
 </script>

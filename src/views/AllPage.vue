@@ -25,8 +25,6 @@
             </ion-label>
 
             <share-button :holiday="h" />
-
-            <notify-button :holiday="h" />
           </ion-item>
         </ion-item-group>
       </ion-list>
@@ -55,7 +53,6 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import HolidayData from '../../public/assets/json/holidays.json';
-import NotifyButton from '../components/NotifyButton.vue';
 import ShareButton from '../components/ShareButton.vue';
 
 export default defineComponent({
@@ -146,7 +143,6 @@ export default defineComponent({
     IonLabel,
     IonItem,
     IonItemGroup,
-    NotifyButton,
     ShareButton,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
